@@ -188,14 +188,20 @@ func spotifyAuthRequest(tracksByMonth map[string][]spotify.ID) {
 	// Create playlist per month
 	for month, tracks := range tracksByMonth {
 
+		// Playlist name
+		splt := strings.Split(month, ".") // In month.year format
+		playlistName := fmt.Sprintf("%s %s %s", venue, splt[0], splt[1])
+
+		// TODO add to current if already exists
+
 		// Create public playlist
-		playlistName := fmt.Sprintf("%s %s", venue, month)
 		playlist, err := client.CreatePlaylistForUser(user.ID, playlistName, true)
 		if err != nil {
 			panic(err)
 		}
 
 		// Add all tracks
+		// TODO random order
 		for _, trackID := range tracks {
 			client.AddTracksToPlaylist(user.ID, playlist.ID, trackID)
 		}
